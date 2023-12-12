@@ -1,10 +1,10 @@
-name: Create translation pull request J4
+name: Create translation pull request J5
 
 on:
   workflow_dispatch:
 
   schedule:
-    - cron:  '27 7 * * *'
+    - cron:  '37 7 * * *'
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
           token: ${{ secrets.GPAT }}
           repository: heelc29/joomla-cms
           fetch-depth: 0
-          ref: 4.4-dev
+          ref: 5.0-dev
 
       - uses: actions/setup-node@v4
         with:
@@ -29,8 +29,8 @@ jobs:
         run: |
           git remote add upstream https://github.com/joomla/joomla-cms.git
           git fetch upstream
-          git checkout --progress --force -B translation-j4 refs/remotes/origin/4.4-dev
-          git reset --hard upstream/4.4-dev
+          git checkout --progress --force -B translation-j5 refs/remotes/origin/5.0-dev
+          git reset --hard upstream/5.0-dev
 
       - name: Fetch and extract translations
         run: |
@@ -41,7 +41,7 @@ jobs:
       - name: Syncing directories
         run: |
           cd ..
-          SYNC_VERSION="v4"
+          SYNC_VERSION="v5"
 
           SYNC_PATH="installation/language/"
           echo ${SYNC_PATH}
