@@ -29,12 +29,6 @@ jobs:
           git fetch upstream
           git merge upstream/5.1-dev
 
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
-
       - name: Install dependencies
         uses: php-actions/composer@v6
         with:
