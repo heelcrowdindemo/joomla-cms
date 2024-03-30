@@ -1,0 +1,46 @@
+name: Update pull request
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GPAT }}
+          repository: heelc29/joomla-cms
+          fetch-depth: 0
+          ref: 5.1/php84-migration
+
+      - name: Fetch latest cms changes
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git remote add upstream https://github.com/joomla/joomla-cms.git
+          git fetch upstream
+          git merge upstream/5.1-dev
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+
+      - name: Fix code style
+        run: |
+          ./libraries/vendor/bin/php-cs-fixer fix -vvv
+
+      - name: Create commit
+        run: |
+          git add .
+          git commit -m "Fix code style"
+          git push --force
