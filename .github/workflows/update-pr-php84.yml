@@ -42,4 +42,4 @@ jobs:
         run: |
           git add .
           git commit -m "Fix code style"
-          git push --force
+          git push
